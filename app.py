@@ -141,7 +141,7 @@ def predict():
     else:
       ans = f"""
         <div class="row text-center mt-5">
-            <h1 class="display-1 text-success mb-5"><b>Accept</b></h1>
+            <h1 class="display-1 text-success mb-5"><b>ACCEPT</b></h1>
             <div class="card mx-auto" style="width: 90vw; background-color: antiquewhite;">
                 <div class="card-header">
                     Product Type: <b>Bangle</b>
