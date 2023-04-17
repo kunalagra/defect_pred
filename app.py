@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,url_for
 import tensorflow as tf
 from tensorflow.keras.layers import *
 import os
@@ -98,9 +98,10 @@ def home():
 @app.route('/predict',methods=["POST"])
 def predict():
     f = request.files['upload']
-    f.save(f.filename)
+    fp = os.path.join("static", f.filename)
+    f.save(fp)
     img = tf.keras.preprocessing.image.load_img(
-    f.filename, target_size=(img_height, img_width)
+    fp, target_size=(img_height, img_width)
     )
     img_array = tf.keras.preprocessing.image.img_to_array(img)
 
@@ -110,10 +111,53 @@ def predict():
     res = model.predict(img_array)
 
     if res[0][0] < 0.5:
-      ans = "Discard"
+      ans = f"""
+        <div class="row text-center mt-5">
+            <h1 class="display-1 text-danger mb-5"><b>REJECT</b></h1>
+            <div class="card mx-auto" style="width: 90vw; background-color: antiquewhite;">
+                <div class="card-header">
+                    Product Type: <b>Bangle</b>
+                </div>
+
+                <div class="col-lg-6 mx-auto">
+                <img class="card-img-top rounded" src="{ url_for('static', filename=f.filename)}" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Product Code: <b>4oSEGXNu</b></h5>
+                    <p class="card-text">This product, on the Flat Belt Conveyor Belt on production line 2, was found to
+                        be defective and has been rejected from the production line.
+                    </p>
+                    <p class="card-text">The possible defects could be:</p>
+                    <ul class="list-group">
+                        <li class="list-group-item">Dimensional or tolerance defect</li>
+                        <li class="list-group-item">Material defect</li>
+                        <li class="list-group-item">Surface defect</li>
+                        <li class="list-group-item">Assembly defect</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      """
     else:
-      ans = "Good"
-    os.remove(f.filename)
+      ans = f"""
+        <div class="row text-center mt-5">
+            <h1 class="display-1 text-success mb-5"><b>Deliver</b></h1>
+            <div class="card mx-auto" style="width: 90vw; background-color: antiquewhite;">
+                <div class="card-header">
+                    Product Type: <b>Bangle</b>
+                </div>
+                <div class="col-lg-6 mx-auto">
+                <img class="card-img-top rounded" src="{ url_for('static', filename=f.filename)}" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Product Code: <b>VGvmGPEr</b></h5>
+                    <p class="card-text">This product, on the Flat Belt Conveyor Belt on production line 2, meets the required quality standards and is ready to deliver.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+      """
     return render_template('output.html', output = ans)
 
 if __name__ == "__main__":
