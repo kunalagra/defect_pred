@@ -1,6 +1,4 @@
 Flask
-matplotlib
-numpy
-Pillow
+flask_ngrok
 tensorflow
 gunicorn

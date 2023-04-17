@@ -1,12 +1,11 @@
-from flask import Flask, render_template, request, redirect
-import numpy as np 
+from flask import Flask, render_template, request
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.layers import *
-import matplotlib.pyplot as plt
-from PIL import Image
 import os
+from flask_ngrok import run_with_ngrok
+
 app = Flask(__name__)
+run_with_ngrok(app)
 app.secret_key = "SessionKEy145"
 app.config['SESSION_TYPE'] = 'filesystem'
 
