@@ -87,8 +87,6 @@ class NeuralNetwork(tf.keras.Model):
         return tf.keras.Model(inputs=[x], outputs=self.call(x))
 
 model = NeuralNetwork()
-model.load_weights("model/Baseline.ckpt")
-
 
 
 @app.route('/', methods=["GET"])
